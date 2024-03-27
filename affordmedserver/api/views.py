@@ -3,7 +3,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from .models import Product
 
-from .utils import fetch_products, fetch_product_detail
+from .utils import fetch_products, sort_products, paginate_products
 import requests
 
 from .models import AccessToken
@@ -24,29 +24,7 @@ def product_list(request, categoryname):
 
     return Response(page_of_products)
 
-@api_view(['GET'])
-@permission_classes([IsAuthenticated])
-def product_detail(request, categoryname, productid):
-    product = fetch_product_detail(categoryname, productid)
-    return Response(product)
 
-
-
-
-# @api_view(['POST'])
-# def register(request):
-#     data = request.data
-#     response = requests.post('http://20.244.56.144/test/register', json=data)
-#     response_data = response.json()
-
-#     if response.status_code == 200:
-#         AccessToken.objects.create(
-#             company_name=data.get('companyName'),
-#             client_id=response_data['clientID'],
-#             client_secret=response_data['clientSecret'],
-#             access_token=''  
-#         )
-#     return Response(response_data, status=response.status_code)
 
 @api_view(['GET'])
 def get_auth_token(request):
@@ -70,17 +48,4 @@ def get_auth_token(request):
 
     return Response(response_data)
 
-@api_view(['GET'])
-def get_products(request, companyname, categoryname):
-    access_token_obj = AccessToken.objects.get(company_name=companyname)
-    auth_token = access_token_obj.access_token
 
-    top = request.query_params.get('top')
-    min_price = request.query_params.get('minPrice')
-    max_price = request.query_params.get('maxPrice')
-
-    headers = {'Authorization': f'Bearer {auth_token}'}
-    url = f'http://20.244.56.144/test/companies/{companyname}/categories/{categoryname}/products?top={top}&minPrice={min_price}&maxPrice={max_price}'
-
-    response = requests.get(url, headers=headers)
-    return Response(response.json())
