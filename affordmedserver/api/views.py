@@ -12,7 +12,6 @@ from django.conf import settings
 
 
 @api_view(['GET'])
-@permission_classes([IsAuthenticated])
 def product_list(request, categoryname):
     sort_by = request.query_params.get('sort', None)
     page = int(request.query_params.get('page', 1))
@@ -34,13 +33,16 @@ def product_list(request, categoryname):
 
 
 
-
+from rest_framework.exceptions import NotFound
 
 @api_view(['GET'])
 def get_auth_token(request):
 
     company_name = request.query_params.get('companyName')
-    access_token_obj = AccessToken.objects.get(company_name=company_name)
+    try:
+        access_token_obj = AccessToken.objects.get(company_name=company_name)
+    except AccessToken.DoesNotExist:
+        raise NotFound(detail="AccessToken for the specified company does not exist.")
 
     data = {
         'companyName': company_name,
