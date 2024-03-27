@@ -41,12 +41,12 @@ INSTALLED_APPS = [
     'api',
 ]
 
-AUTH_USER_MODEL = 'api.UniversityUser'
-REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
-    ),
-}
+# AUTH_USER_MODEL = 'api.UniversityUser'
+# REST_FRAMEWORK = {
+#     'DEFAULT_AUTHENTICATION_CLASSES': (
+#         'rest_framework_simplejwt.authentication.JWTAuthentication',
+#     ),
+# }
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

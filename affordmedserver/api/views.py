@@ -12,7 +12,6 @@ from django.conf import settings
 
 
 @api_view(['GET'])
-@permission_classes([IsAuthenticated])
 def product_list(request, categoryname):
     sort_by = request.query_params.get('sort', 'rating')
     page = int(request.query_params.get('page', 1))
